@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Two Point Oh!</title>
+    <style>
+        /* Style the body and set a background color */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        /* Style the header */
+        h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        /* Style the paragraph */
+        p {
+            color: #34495e;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            text-align: center;
+            max-width: 600px;
+        }
+
+        /* Style the form and input fields */
+        form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        label {
+            font-size: 1em;
+            margin-bottom: 5px;
+            color: #34495e;
+        }
+
+        input {
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 200px;
+            font-size: 1em;
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 20px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+    <script>
+        // callAPI function that takes the latitude and longitude numbers as parameters
+        var callAPI = (lat1, lon1, lat2, lon2) => {
+            // instantiate a headers object
+            var myHeaders = new Headers();
+            // add content type header to object
+            myHeaders.append("Content-Type", "application/json");
+            // using built in JSON utility package turn object to string and store in a variable
+            var raw = JSON.stringify({"lat1": lat1, "lon1": lon1, "lat2": lat2, "lon2": lon2});
+            // create a JSON object with parameters for API call and store in a variable
+            var requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+            };
+            // make API call with parameters and use promises to get response
+            fetch("https://6azofamzgc.execute-api.ca-central-1.amazonaws.com/dev", requestOptions)
+                .then(response => response.text()) // first convert the response to text and then parse it back to json, just in case
+                .then(response => JSON.parse(response)) // parse it back to json
+                .then(response => alert(response.body))
+                .catch(error => console.log('error', error));
+        }
+    </script>
+</head>
+<body>
+    <h1>TWO POINT OH!</h1>
+    <p>Enter the latitude and longitude in decimal degrees for two points, then click Calculate to view the distance in kilometers between the two points.</p>
+    <form>
+        <label for="lat1">Latitude 1:</label>
+        <input type="text" id="lat1" placeholder="Enter Latitude 1">
+        <label for="lon1">Longitude 1:</label>
+        <input type="text" id="lon1" placeholder="Enter Longitude 1">
+        <br><br>
+        <label for="lat2">Latitude 2:</label>
+        <input type="text" id="lat2" placeholder="Enter Latitude 2">
+        <label for="lon2">Longitude 2:</label>
+        <input type="text" id="lon2" placeholder="Enter Longitude 2">
+        <br><br>
+        <!-- set button onClick method to call function we defined passing input values as parameters -->
+        <button type="button" onclick="callAPI(document.getElementById('lat1').value, document.getElementById('lon1').value, document.getElementById('lat2').value, document.getElementById('lon2').value)">CALCULATE</button>
+    </form>
+</body>
+</html>
